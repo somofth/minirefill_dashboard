@@ -1,0 +1,4 @@
+# 의존성 폴더 (가장 중요)
+node_modules/
+# 빌드 결과물 (배포 시 Vercel이 만들어 줌)
+build/
