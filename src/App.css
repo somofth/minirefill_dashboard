@@ -375,6 +375,58 @@ main {
   box-shadow: var(--shadow);
 }
 
+.station-card-list,
+.product-card-list {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.station-card,
+.product-card {
+  background: var(--surface);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.station-card-header,
+.product-card-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.station-card-meta,
+.product-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.station-card-body,
+.product-card-body {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-inline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
 .station-table {
   width: 100%;
   border-collapse: collapse;
@@ -688,13 +740,54 @@ main {
 @media (max-width: 768px) {
   .app-shell {
     grid-template-columns: 1fr;
+    min-height: 100vh;
   }
 
   .sidebar {
+    grid-row: 2;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.4);
+    z-index: 200;
+  }
+
+  .sidebar-top {
+    display: none;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .sidebar nav {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .sidebar .nav-button {
+    flex: 1;
+    align-items: center;
+    text-align: center;
+    padding: 8px 10px;
+  }
+
+  .sidebar .nav-label {
+    display: none;
+  }
+
+  .sidebar .nav-short {
+    display: inline;
+    font-size: 0.85rem;
   }
 
   .sidebar-footer {
@@ -702,7 +795,8 @@ main {
   }
 
   main {
-    padding: 24px;
+    padding: 20px;
+    padding-bottom: 120px;
   }
 
   .page-header,
@@ -714,5 +808,25 @@ main {
   .header-actions {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .station-table-wrapper,
+  .product-table {
+    display: none;
+  }
+
+  .station-card-list,
+  .product-card-list {
+    display: flex;
+  }
+
+  .station-detail {
+    display: none;
+  }
+
+  .station-layout,
+  .product-layout,
+  .stacked {
+    grid-template-columns: 1fr;
   }
 }

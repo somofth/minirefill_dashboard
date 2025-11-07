@@ -42,6 +42,8 @@ function App() {
   const [isProductModalOpen, setProductModalOpen] = useState(false);
   const [productModalMode, setProductModalMode] = useState("create");
   const [productDetail, setProductDetail] = useState(null);
+  const [expandedStationId, setExpandedStationId] = useState(null);
+  const [expandedProductId, setExpandedProductId] = useState(null);
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [analyticsRange, setAnalyticsRange] = useState("weekly");
 
@@ -69,6 +71,14 @@ function App() {
   const handleImageUpload = (event) => {
     const file = event.target.files?.[0];
     setProductForm((prev) => ({ ...prev, image: file ? file.name : null }));
+  };
+
+  const toggleStationCard = (stationId) => {
+    setExpandedStationId((prev) => (prev === stationId ? null : stationId));
+  };
+
+  const toggleProductCard = (productId) => {
+    setExpandedProductId((prev) => (prev === productId ? null : productId));
   };
 
   const openProductDetail = (product) => {
@@ -255,6 +265,72 @@ function App() {
           </table>
         </div>
 
+        <div className="station-card-list">
+          {stationList.map((station) => {
+            const isExpanded = expandedStationId === station.id;
+            return (
+              <div key={station.id} className={`station-card ${isExpanded ? "expanded" : ""}`}>
+                <button
+                  type="button"
+                  className="station-card-header"
+                  onClick={() => toggleStationCard(station.id)}
+                >
+                  <div>
+                    <p className="eyebrow">{station.id}</p>
+                    <h3>{station.partner}</h3>
+                    <p className="subtext">{station.location}</p>
+                  </div>
+                  <div className="station-card-meta">
+                    <span className={`status-dot ${station.status}`} />
+                    <span>{station.status === "online" ? "온라인" : "오프라인"}</span>
+                    <span className={`chip ${station.inventory < 20 ? "critical" : "ghost"}`}>
+                      재고 {station.inventory}%
+                    </span>
+                  </div>
+                </button>
+                {isExpanded && (
+                  <div className="station-card-body">
+                    <p>
+                      <strong>리필 필요:</strong> {station.refillItem}
+                    </p>
+                    <p>
+                      <strong>최근 점검:</strong> {station.lastInspection}
+                    </p>
+                    <p className="subtext">{station.address}</p>
+                    <p className="subtext">담당자: {station.contact}</p>
+                    <div className="mobile-inline-grid">
+                      <div>
+                        <h4>디스펜서</h4>
+                        <ul className="mini-list">
+                          {station.dispensers.map((item) => (
+                            <li key={item.slot}>
+                              <span>{item.slot}</span>
+                              <p>{item.product}</p>
+                              <strong>{item.percent}%</strong>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4>최근 매출</h4>
+                        <ul className="mini-list">
+                          {station.recentSales.map((sale) => (
+                            <li key={`${station.id}-${sale.time}-${sale.product}`}>
+                              <span>{sale.time}</span>
+                              <p>{sale.product}</p>
+                              <strong>{sale.amount}</strong>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
         {selectedStation && (
           <div className="station-detail card">
             <p className="eyebrow">스테이션 상세</p>
@@ -389,6 +465,44 @@ function App() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="product-card-list">
+        {productList.map((product) => {
+          const isExpanded = expandedProductId === product.id;
+          return (
+            <div key={product.id} className={`product-card ${isExpanded ? "expanded" : ""}`}>
+              <button
+                type="button"
+                className="product-card-header"
+                onClick={() => toggleProductCard(product.id)}
+              >
+                <div>
+                  <h3>{product.name}</h3>
+                  <p className="subtext">{product.supplier}</p>
+                </div>
+                <div className="product-card-meta">
+                  <span className="chip neutral">{product.category}</span>
+                  <span className="chip ghost">{product.status}</span>
+                </div>
+              </button>
+              {isExpanded && (
+                <div className="product-card-body">
+                  <p>
+                    <strong>단가:</strong> {product.unitPrice}원/g
+                  </p>
+                  <p>
+                    <strong>위생/정보:</strong> {product.hygieneInfo}
+                  </p>
+                  <p>
+                    <strong>최근 소분:</strong> {product.lastRefillAt}
+                  </p>
+                  <p className="subtext">{product.description}</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {productDetail && (
