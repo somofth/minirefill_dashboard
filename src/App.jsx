@@ -488,6 +488,11 @@ function App() {
               </button>
               {isExpanded && (
                 <div className="product-card-body">
+                  <img
+                    src={product.image}
+                    alt={`${product.name} 이미지`}
+                    className="product-card-image"
+                  />
                   <p>
                     <strong>단가:</strong> {product.unitPrice}원/g
                   </p>

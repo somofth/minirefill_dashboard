@@ -420,6 +420,13 @@ main {
   gap: 8px;
 }
 
+.product-card-image {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  max-height: 220px;
+}
+
 .mobile-inline-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
